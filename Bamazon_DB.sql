@@ -6,8 +6,8 @@ CREATE TABLE products (
     id INT NOT NULL AUTO_INCREMENT,
     product_name  VARCHAR(40) NULL,
     department_name VARCHAR(40) NULL,
-    customer_price INT(20000) NULL,
-    stock_quantity INT(20000) NULL,
+    customer_price INT(50) NULL,
+    stock_quantity INT(50) NULL,
     PRIMARY KEY (id)
 );
 
