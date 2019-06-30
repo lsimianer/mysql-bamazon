@@ -60,35 +60,45 @@ var buyProduct = function(){
     connection.query("SELECT * FROM products", function(err, res) {
       if (err) throw err;
 
-      var shoppingCart;
-          for (var i = 0; i < res.length; i++) {
-            if (res[i].id === parseInt(inqRes.idSelect)) {
-              shoppingCart = res[i];  
-            } 
-          }
-        if(shoppingCart.stock_quantity > parseInt(inqRes.qty)){
-          connection.query(
-            "UPDATE products SET ? WHERE ?",
-            [
-            {
-              stock_quantity: (shoppingCart.stock_quantity - parseInt(inqRes.qty))
-            },
-            {
-              id: inqRes.idSelect
-            }
-          ],
-          function(error) {
-            if (error) throw error;
-              console.log("Thank you for shopping bamazon! Your neighborhood arms dealer. Your total today is " + "$" + parseInt(inqRes.qty) * shoppingCart.customer_price);
-              connection.end();
+      if( inqRes.go === "yes"){
 
+        var shoppingCart;
+              for (var i = 0; i < res.length; i++) {
+                if (res[i].id === parseInt(inqRes.idSelect)) {
+                  shoppingCart = res[i];  
+                } 
+              }
+            if(shoppingCart.stock_quantity > parseInt(inqRes.qty)){
+              connection.query(
+                "UPDATE products SET ? WHERE ?",
+                [
+                {
+                  stock_quantity: (shoppingCart.stock_quantity - parseInt(inqRes.qty))
+                },
+                {
+                  id: inqRes.idSelect
+                }
+              ],
+              function(error) {
+                if (error) throw error;
+                  console.log("Thank you for shopping bamazon! Your neighborhood arms dealer. Your total today is " + "$" + parseInt(inqRes.qty) * shoppingCart.customer_price);
+                  connection.end();
+
+                }
+                
+              );
+              } else {
+                console.log("What do you need so many for? thats worrisome, were calling the feds....weirdo");
+                connection.end();
             }
+      } 
+      else{
+        console.log("Well, I see you're not so compulsive these days, goodbye.")
+        connection.end();
+      }
             
-          );
-          } else {
-            console.log("What do you need so many for? thats worrisome, were calling the feds....weirdo");
-            connection.end();
-         }
       });
   });
 };
+  
+    
