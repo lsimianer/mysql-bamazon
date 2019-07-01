@@ -1,5 +1,9 @@
 var  mysql = require('mysql');
 var inquirer = require('inquirer');
+var Table = require('cli-table');
+var colors = require('colors');
+
+
 
 // var env = require("dotenv").config();
 
@@ -26,14 +30,14 @@ connection.connect(function(error) {
   function mainMenu(){
       connection.query("SELECT * FROM products",function(err,res){
         if (err) throw err;
-        console.log(res);
         for (let i = 0; i < res.length; i++) {
-          console.log("Item #: " + res[i].id + "|" + 
-                      "Product: " + res[i].product_name + "|" + 
-                      "Department: " + res[i].department_name + "|" + 
-                      "Price: " + "$" + res[i].customer_price + "|" +
-                      "In Stock: " + res[i].stock_quantity);
-          console.log("--------------------------------------------------------------------------------");
+          console.log("Item #: ".green + res[i].id + "|" + 
+                      "Product: " .underline.green+ res[i].product_name + "|" + 
+                      "Department: ".underline.green + res[i].department_name + "|" + 
+                      "Price: " + "$".underline.green + res[i].customer_price + "|" +
+                      "In Stock: ".red.underline.green + res[i].stock_quantity);
+          console.log("--------------------------------------------------------------------------------".rainbow);
+        
         }  
         buyProduct();
     });
@@ -81,19 +85,18 @@ var buyProduct = function(){
               ],
               function(error) {
                 if (error) throw error;
-                  console.log("Thank you for shopping bamazon! Your neighborhood arms dealer. Your total today is " + "$" + parseInt(inqRes.qty) * shoppingCart.customer_price);
+                  console.log("Thank you for shopping bamazon! Your neighborhood arms dealer. Your total today is ".bgGreen.underline.black + "$".green + parseInt(inqRes.qty) * shoppingCart.customer_price);
                   connection.end();
-
                 }
                 
               );
               } else {
-                console.log("What do you need so many for? thats worrisome, were calling the feds....weirdo");
+                console.log(" We have insufficient quantitties to fill your order. What do you need so many for? thats worrisome, were calling the feds....weirdo".bgRed);
                 connection.end();
             }
       } 
       else{
-        console.log("Well, I see you're not so compulsive these days, goodbye.")
+        console.log("Well, I see you're not so compulsive these days, goodbye.".bgWhite.black)
         connection.end();
       }
             
