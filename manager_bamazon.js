@@ -121,3 +121,50 @@ var connection = mysql.createConnection({
 
 
 
+
+    function addProd(inqRes) {
+        inquirer.prompt(
+            [
+                {
+                    type: "input",
+                    message: "What do you want to add?",
+                    name: "object"
+                },
+                {
+                    type: "number",
+                    message: "what is the new Stock Quantity",
+                    name: "newQty"   
+                }, 
+                {
+                    type: "input",
+                    message: "what department is is it in?",
+                    name: "depName"   
+                }, {
+                    type: "number",
+                    message: "what is the list price?",
+                    name: "price"   
+                }, 
+            ]).then(function (inqRes) {
+        var query = connection.query(
+            "INSERT INTO products SET ?",
+            
+            {
+                stock_quantity: inqRes.newQty,
+                product_name: inqRes.object,
+                department_name: inqRes.depName,
+                customer_price: inqRes.price,
+            },
+            function (err, inqRes) {
+                if (err) throw err;
+                console.log("Inserting the new project...\n");
+
+                console.log(inqRes.affectedRows + " object inserted!\n");
+                mainMenu();
+    
+            }
+        )
+    });
+};
+
+
+
